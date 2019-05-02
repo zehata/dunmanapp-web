@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css.css">
+    <script src="./md5.js"></script>
+    <title>Home</title>
+    <style>
+        *{
+            user-select: none;
+        }
+        #recnavbar{
+            position: fixed;
+            top:0;
+            left: 0;
+            width: 100vw;
+            height: fit-content;
+            background-color: rgba(255,255,255,0.7);
+            display: none;
+            z-index: 1;
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        #allnavbar{
+            position: fixed;
+            top:0;
+            left: 0;
+            width: 100vw;
+            height: fit-content;
+            background-color: rgba(255,255,255,0.7);
+            display: none;
+            z-index: 1;
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .top{
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+        }
+        .title{
+            margin-top: 15vh;
+            margin-left: 20px;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .greet{
+            margin-left: 20px;
+            font-size: 1.2em;
+        }
+        .segctrl{
+            border-radius: 10px;
+            width: calc(100vw - 44px);
+            margin-left:20px;
+            border: 2px solid rgb(0, 122, 255);
+            margin-top:10px;
+            display: inline-flex;
+            margin-bottom: 10px;
+        }
+        .segbtn{
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            color: rgb(0,122,255);
+        }
+        .barsegbtn{
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            color: rgb(0,122,255);
+        }
+        #reccardcont{
+            width: calc(100% - 40px);
+            margin-left: 20px;
+        }
+        .cardwrappers{
+            height: 200px;
+            width: 100%;
+            margin-bottom: 10px;
+            overflow:hidden;
+            transition: height 0.1s cubic-bezier(.25,.8,.25,1);
+            -webkit-backdrop-filter : blur(10px);
+            backdrop-filter : blur(10px);
+        }
+        #reccont{
+            position: fixed;
+            height: 100vh;
+            width: 100vw;
+            left: 0;
+            top:0;
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+            overflow-y: overlay;
+        }
+        #allcont{
+            position: fixed;
+            height: 100vh;
+            width: 100vw;
+            left: 0;
+            top:0;
+            display: none;
+            overflow-y: overlay;
+        }
+        #allappscont{
+            width: 100%;
+            background-color: white;
+        }
+        .allapps{
+            width: calc(100% - 20px);
+            margin-left: 20px;
+            border-bottom: 1px solid grey;
+        }
+        .allappsnames{
+            flex-grow: 1;
+            padding:15px;
+            padding-left: 0;
+            padding-right: 0;
+            font-size: 1.2em;
+        }
+        .cards{
+            height: 100%;
+            width: 100%;
+            background-color: rgb(0,122,255);
+            border-radius: 10px;
+            transition: height 0.3s cubic-bezier(.25,.8,.25,1);
+            position: relative;
+        }
+        iframe{
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            border: none;
+            border-radius: 10px;
+            /*display: none;*/
+        }
+        .veil{
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top:0;
+            left: 0;
+        }
+        .noscroll{
+            overflow-y: hidden;
+        }
+        #debug{
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top:0;
+            width: 100vw;
+            height: fit-content;
+            background-color: white;
+        }
+.listcardtitle{
+    position: relative;
+    margin-top: 10px;
+    padding: 20px;
+    padding-bottom: 0;
+    width: calc(100% - 40px);
+    font-size: 1.5em;
+    color:inherit;
+    font-family: SF Display Pro;
+    text-align: right;
+}
+.minilistcont{
+    height: calc(100% - 40px);
+    width: calc(100% - 40px);
+    padding: 20px;
+    padding-top: 0;
+}
+.minilistwhite{
+    width: calc(100%);
+    height: fit-content;
+    border-bottom: 1px solid white;
+    color:white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+}
+.minilistblack{
+    width: calc(100%);
+    height: fit-content;
+    border-bottom: 1px solid black;
+    color:black;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+}
+.listleft{
+    flex-grow: 1;
+}
+.listright{
+    flex-grow: 1;
+    text-align: right;
+}
+#dialog{
+    z-index: 10;
+    margin: auto;
+    width: 80vw;
+    height: 30vh;
+    background-color: #eee;
+    opacity: 0;
+    position: fixed;
+    left: 10vw;
+    top: 35vh;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 5px;
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+#dialogbtns{
+    height: fit-content;
+    border-top: 1px solid #ccc;
+    display: flex;
+}
+#allowpermission{
+    width: 100%;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+    color:rgb(0,122,255);
+}
+#denypermission{
+    width: 100%;
+    padding: 20px;
+    color:rgb(0,122,255);
+}
+#darken{
+    position: fixed;
+    left: 0;
+    top:0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 9;
+    opacity: 0;
+    display: none;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+    </style>
+  </head>
+
+  <body onload="parent.loaded(); if(localStorage.getItem('lastscreen')){if(localStorage.getItem('lastscreen') == 'all'){changetoall();}} timecheck();">
+        <div id="reccont">
+            <div id="recnavbar">
+                <div id="recbarsegctrl" class="segctrl">
+                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">Recommended</div>
+                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255);">All</div>
+                </div>
+            </div>
+            <div class="top">
+                <div class="title">Home</div>
+                <div class="greet" id="greet0"></div>
+            </div>
+            <div id="recsegctrl" class="segctrl">
+                <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">Recommended</div>
+                <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255);">All</div>
+            </div>
+            <div id="reccardcont">
+            </div>
+        </div>
+        <div id="allcont">
+            <div id="allnavbar">
+                <div id="allbarsegctrl" class="segctrl">
+                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255);">Recommended</div>
+                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">All</div>
+                </div>
+            </div>
+            <div class="top">
+                <div class="title">Home</div>
+                <div class="greet" id="greet1"></div>
+            </div>
+            <div id="allsegctrl" class="segctrl">
+                <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255);">Recommended</div>
+                <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">All</div>
+            </div>
+            <div id="allappscont">
+            </div>
+        </div>
+        <div id="dialog">
+            <div style="margin-top:15px; flex-grow: 1;">This app would like to access your profile. This app will be able to read your name and email. Allow this request?</div>
+            <div id="dialogbtns">
+                <div id="allowpermission" onclick="parent.allowpermission();">Allow</div>
+                <div id="denypermission" onclick="parent.denypermission();">Deny</div>
+            </div>
+        </div>
+    <div id="darken"></div>
+    <script>
+    var timecheckinterval;
+
+    function timecheck(){
+        var d = new Date();
+        var greet0 = document.getElementById('greet0');
+        var greet1 = document.getElementById('greet1');
+        if(d.getHours() < 1){
+            greet0.innerHTML = "Good Night";
+            greet1.innerHTML = "Good Night";
+        } else if(d.getHours() < 4){
+            greet0.innerHTML = "Why are you not sleeping";
+            greet1.innerHTML = "Why are you not sleeping";
+        } else if(d.getHours() < 12){
+            greet0.innerHTML = "Good Morning";
+            greet1.innerHTML = "Good Morning";
+        } else if (d.getHours() < 16){
+            greet0.innerHTML = "Good Afternoon";
+            greet1.innerHTML = "Good Afternoon";
+        } else if (d.getHours() < 20){
+            greet0.innerHTML = "Good Evening";
+            greet1.innerHTML = "Good Evening";
+        } else {
+            greet0.innerHTML = "Good Night";
+            greet1.innerHTML = "Good Night";
+        }
+        var secondstillnxtmn = 60 - d.getSeconds();
+        setTimeout(function(){
+            timecheckinterval = setInterval(function(){
+                d = new Date();
+                if(d.getMinutes() == 0){
+                    var greet0 = document.getElementById('greet0');
+                    var greet1 = document.getElementById('greet1');
+                    if(d.getHours() < 1){
+                        greet0.innerHTML = "Good Night";
+                        greet1.innerHTML = "Good Night";
+                    } else if(d.getHours() < 4){
+                        greet0.innerHTML = "Why are you not sleeping";
+                        greet1.innerHTML = "Why are you not sleeping";
+                    } else if(d.getHours() < 12){
+                        greet0.innerHTML = "Good Morning";
+                        greet1.innerHTML = "Good Morning";
+                    } else if (d.getHours() < 16){
+                        greet0.innerHTML = "Good Afternoon";
+                        greet1.innerHTML = "Good Afternoon";
+                    } else if (d.getHours() < 20){
+                        greet0.innerHTML = "Good Evening";
+                        greet1.innerHTML = "Good Evening";
+                    } else {
+                        greet0.innerHTML = "Good Night";
+                        greet1.innerHTML = "Good Night";
+                    }
+                }
+            },60000);
+        },secondstillnxtmn*1000)
+    }
+
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+var beforetdtouchy = 0;
+
+function tdtouchexpand(card){
+    beforetdtouchy = $('reccont').scrollTop;
+    document.body.style.backgroundColor = "rgba(0,0,0,0.1)";
+    document.body.className = "noscroll";
+    $('reccont').style.overflowY = "hidden";
+    card.parentElement.style.position = "absolute";
+    card.parentElement.style.top = "10%";
+    card.parentElement.style.height = "80%";
+    card.parentElement.style.width = "calc(100vw - 40px)";
+    card.parentElement.style.left = "20px";
+    tdtouchindex = card.id;
+    try{$('context'+tdtouchindex.slice(4)).contentWindow.on3dtouch();}catch(e){};    
+    card.parentElement.parentElement.style.zIndex = "1";
+    card.parentElement.parentElement.style.width = "100vw";
+    card.parentElement.parentElement.style.height = "100vh";
+    card.parentElement.parentElement.style.position = "fixed";
+    card.parentElement.parentElement.style.left = "0";
+    card.parentElement.parentElement.style.bottom = "0";
+    card.parentElement.parentElement.style.marginBottom = "0";
+}
+
+function clickside(event){
+    var card = $(tdtouchindex);
+    if(event.target = card.parentElement){
+        canceltdtouch();
+    }
+}
+
+var tdtouchindex = "";
+
+function canceltdtouch(){
+    if(tdtouchindex){
+        try{
+            setTimeout(function(){$('reccont').scrollTop = beforetdtouchy;},1);
+    var card = $(tdtouchindex);
+    document.body.style.backgroundColor = "white";
+    document.body.className = "";
+    $('reccont').style.overflowY = "overlay";
+    card.parentElement.style.position = "absolute";
+    card.parentElement.style.top = "0";
+    card.parentElement.style.height = "100%";
+    card.parentElement.style.width = "100%";
+    card.parentElement.style.left = "0";
+    try{$('context'+tdtouchindex.slice(4)).contentWindow.on3dtouchend();}catch(e){};    
+    card.parentElement.parentElement.style.zIndex = "0";
+    card.parentElement.parentElement.style.width = "100%";
+    card.parentElement.parentElement.style.height = "200px";
+    card.parentElement.parentElement.style.position = "relative";
+    card.parentElement.parentElement.style.left = "0";
+    card.parentElement.parentElement.style.bottom = "0";
+    card.parentElement.parentElement.style.marginBottom = "10px";
+    } catch (e){}
+    }
+}
+
+function onTouchEnd(e){
+    canceltdtouch();
+}
+
+// the maximum force value of a touch event is 1
+function onTouchForceChange(e) {
+    if(e.changedTouches[0].force >= 0.50){
+        tdtouchexpand(event.target);
+    } else {
+        canceltdtouch();
+    }
+    if(e.changedTouches[0].force > 0.99){
+        var appid = reccards[event.target.id.slice(4)];
+        for(var i = 0; i < applist.length; i++){
+            if(applist[i][2] == appid){
+                parent.goto(i);
+            }
+        }
+    }
+}
+
+function straightonclick(){
+    var appid = reccards[event.target.id.slice(4)];
+    for(var i = 0; i < applist.length; i++){
+        if(applist[i][2] == appid){
+            parent.goto(i);
+        }
+    }
+}
+
+function debugtest(e){
+    tdtouchexpand(e.target);
+}
+
+function setupForceClickBehavior(someElement)
+{
+  someElement.addEventListener("touchforcechange", onTouchForceChange, false);
+  someElement.addEventListener("touchend", onTouchEnd, false);
+  someElement.addEventListener("click", straightonclick, false);
+  // someElement.addEventListener("touchstart", debugtest, false);
+}
+
+
+var reccards = [];
+
+    function createLayouts(){
+        reccards = parent.getreccards();
+        var cardscont = document.getElementById('reccardcont');
+        cardscont.innerHTML = "";
+        for(var i = 0; i < reccards.length; i++){
+            var layout = document.createElement('div');
+            layout.id="card"+i;
+            layout.className = "cardwrappers";
+            cardscont.appendChild(layout);
+        }
+    }
+
+function reccardsadaptor(card,id,i){
+        var imageGiver = `window.addEventListener("load", function(){ new MutationObserver(function(mutationsList, observer) {var images = document.getElementsByTagName('img');for(var i = 0; i < images.length; i++){if(images[i].src.slice(0,5) != "data:" && images[i].src != ""){var ogsrc = images[i].src.replace(/^.*[\\\\\\/]/, '').replace(new RegExp("\\\\.", "g"), "?");if(apppics.hasOwnProperty(ogsrc)){images[i].src = apppics[ogsrc];} else {images[i].removeAttribute("src");}}}}).observe(document.body, { attributes: true, childList: true, subtree: true }); }, false);`;
+        var newcard = document.getElementById('card'+i);
+        switch(card.style){
+            case "normal":
+                if(card.theme == "light"){
+                    newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="padding:20px;">'+card.title+'</p>'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
+                    $('reccardcont').appendChild(newcard);
+                } else {
+                    newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="color:white; padding:20px;">'+card.title+'</p>'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
+                    $('reccardcont').appendChild(newcard);
+                }
+                break;
+            case "ioscontext":
+                var app = JSON.parse(localStorage.getItem(id));
+                newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><iframe id="context'+i+'"></iframe><div class="veil" id="veil'+i+'"></div></div>';
+                $('reccardcont').appendChild(newcard);
+                var proappdata = Object.entries(app);
+                var apppics = {};
+                for(var j = 0; j < proappdata.length; j++){
+                    if(typeof proappdata[j][1] == "string"){
+                        if(proappdata[j][1].slice(0,10) == "data:image"){
+                            apppics[proappdata[j][0]] = proappdata[j][1];
+                        }
+                    }
+                }
+                $('context'+i).contentDocument.write('<script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></sc' + 'ript><script type="text/javascript">var config = {    apiKey: "AIzaSyDfAkKocOAk3Elv9V5x0Po4NXuuGGCfdng",    authDomain: "dhypetest0.firebaseapp.com",    databaseURL: "https://dhypetest0.firebaseio.com",    projectId: "dhypetest0",    storageBucket: "",   messagingSenderId: "677082806183"}; firebase.initializeApp(config); </sc' + 'ript><script> var currentappdata = ' + JSON.stringify(currentappdata) + '; try{var dataserver = firebase.database().ref(\'/appsstorage/' + selectedappid + '/\');}catch(e){} try{dataserver.on("value",function(snapshot){currentappdata = snapshot.val(); try{onDataChanged(currentappdata);}catch(e){} });}catch(e){} function savedata(data){ if(Array.isArray(data)){ var data = Object.assign({}, data);} firebase.database().ref("/appsstorage/'+selectedappid+'/").update(data); } function getappdata(){return currentappdata; };  '+imageGiver+' var apppics = '+JSON.stringify(apppics)+'; function getStudentLevel(){ var studentlvl = Number(localStorage.getItem("studentlvl")); return studentlvl; } function getStudentName(){ var name = "'+localStorage.getItem("googleaccountname")+'"; return name; } function getGraduationYear(){ var year = localStorage.getItem("classOf"); return year; } </sc' + 'ript>'+app["context?html"]);
+                break;
+            case "simple":
+                if(card.theme == "light"){
+                    newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="padding:20px; color:white;">'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
+                } else {
+                    newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="padding:20px; color:black;">'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
+                }
+                $('reccardcont').appendChild(newcard);
+                break;
+            case "scrollX":
+                if(card.theme == "light"){
+                    newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:white;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
+                } else {
+                    newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:black;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
+                }
+                $('reccardcont').appendChild(newcard);
+                for (var j = 0; j < card.desc.length; j++) {
+                    var minilist = document.createElement('div');
+                    if(card.theme == "light"){
+                        minilist.className = "minilistwhite";
+                    } else {
+                        minilist.className = "minilistblack";
+                    }
+                    minilist.innerHTML = '<div class="listleft">' + card.desc[j] + '</div>';
+                    $('minilistcont' + i).appendChild(minilist);
+                }
+                break;
+            case "list":
+                if(card.theme == "light"){
+                    newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:white;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
+                } else {
+                    newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:black;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
+                }
+                $('reccardcont').appendChild(newcard);
+                for (var j = 0; j < card.desc.length; j++) {
+                    var minilist = document.createElement('div');
+                    if(card.theme == "light"){
+                        minilist.className = "minilistwhite";
+                    } else {
+                        minilist.className = "minilistblack";
+                    }
+                    minilist.innerHTML = '<div class="listleft">' + card.desc[j][0] + '</div><div class="listright">' + card.desc[j][1] + '</div>';
+                    $('minilistcont' + i).appendChild(minilist);
+                }
+                break;
+        }
+        setupForceClickBehavior($('card'+i));
+}
+
+var recposy = 0;
+
+function changetorec(){
+    localStorage.setItem('lastscreen','rec');
+    allposy = $('allcont').scrollTop;
+    $('reccont').scrollTop = recposy;
+    $('reccont').style.display = "block";
+    $('reccont').style.opacity = "1";
+    setTimeout(function(){$('allcont').style.display = "none";},300);
+    $('allcont').style.opacity = "0";
+}
+
+var allposy = 0;
+
+function changetoall(){
+    localStorage.setItem('lastscreen','all');
+    recposy = $('reccont').scrollTop;
+    $('allcont').scrollTop = allposy;
+    $('allcont').style.display = "block";
+    $('allcont').style.opacity = "1";
+    setTimeout(function(){$('reccont').style.display = "none";},300);
+    $('reccont').style.opacity = "0";
+}
+
+$('reccont').addEventListener("scroll",function(){checkrec();});
+
+function checkrec(){
+    if($('reccont').scrollTop > 180){
+        var recnavbar = $('recnavbar')
+        recnavbar.style.display="block";
+        recnavbar.style.zIndex=3;
+        $('recsegctrl').style.opacity = 0;
+        
+    } else {
+        var recnavbar = $('recnavbar')
+        recnavbar.style.display="none";
+        $('recsegctrl').style.opacity = 1;
+        recnavbar.style.zIndex=1;
+    }
+}
+
+$('allcont').addEventListener("scroll",function(){
+    if($('allcont').scrollTop > 180){
+        var allnavbar = $('allnavbar')
+        allnavbar.style.display="block";
+        
+    } else {
+        var allnavbar = $('allnavbar')
+        allnavbar.style.display="none";
+    }
+});
+
+var currentappid = "";
+var dataserver;
+var currentappdata = "";
+var appver = 0;
+var applist = [];
+var installedapplist;
+
+function $(name) {
+    return document.getElementById(name);
+}
+
+var runninginiOS = true;
+try{
+    webkit.messageHandler.consolelog.postMessage("Hi");
+} catch(e) {
+    runninginiOS = false;
+}
+
+var applist = [];
+
+function populatedrawer(applist){
+    document.getElementById('allappscont').innerHTML = "";
+    for(var i = 0; i < applist.length; i++){
+        var applisting = document.createElement('DIV');
+        applisting.className = "allapps";
+        applisting.innerHTML = "<div onclick=\"goto("+i+");\" style=\"display:inline-flex; width:calc(100% - 20px);\"><div class=\"allappsnames\">"+applist[i][0]+"</div><div style=\"padding-top:15px;\"></div></div>";
+        if(i == (applist.length-1)){
+            applisting.style.borderBottom = "none";
+        }
+        $("allappscont").appendChild(applisting);
+    }
+}
+
+var selectedapp;
+var selectedappid;
+function goto(x) {
+    parent.goto(x);
+}
+
+function gotopage(html) {
+    parent.gotopage(x);
+}
+
+function sendappdata() {
+    return currentappdata;
+}
+
+function updatecheck() {
+    appverserver = firebase.database().ref('appsversion/');
+    if (installedapplist && installedapplist.length > 0) {
+        appverserver.on("value", function(snapshot) { // check the database for app versions and app list version
+            var rawdata = Object.entries(snapshot.val());
+            if (appver < Number(snapshot.val().CurrentVersion)) { // if there has been an update to the app list version
+                // for each installed app
+                for (var j = 0; j < installedapplist.length; j++) {
+                    // should we update or delete or leave it?
+                    // should we delete?
+                    var deleteapp = true;
+                    // does it exist in app server (not applist)
+                    for (var i = 0; i < rawdata.length; i++) {
+                        if (rawdata[i][0] != "applist" && rawdata[i][0] != "CurrentVersion") {
+                            if (installedapplist[j][0] == rawdata[i][0]) {
+                                deleteapp = false;
+                            }
+                        }
+                    }
+                    if (deleteapp == true) {
+                        // delete this app
+                        localStorage.removeItem(installedapplist[j][0]);
+                    }
+                    // should we update?
+                    for (var i = 0; i < rawdata.length; i++) {
+                        if (rawdata[i][0] != "applist" && rawdata[i][0] != "CurrentVersion") {
+                            if (installedapplist[j][0] == rawdata[i][0]) {
+                                // if server version is higher
+                                if (Number(installedapplist[j][1]) < rawdata[i][1]) {
+                                    // then update
+                                    var updatedappid = installedapplist[j][0];
+                                    firebase.database().ref('apps/' + rawdata[i][0] + '/').once("value").then(function(snapshot) {
+                                        localStorage.setItem(updatedappid, JSON.stringify(snapshot.val()));
+                                    });
+                                    installedapplist[j][1] = rawdata[i][1];
+                                }
+                            }
+                        }
+                    }
+                }
+                // for each app in appserver
+                for (var k = 0; k < rawdata.length; k++) {
+                    if (rawdata[k][0] != "applist" && rawdata[k][0] != "CurrentVersion") {
+                        // check if it is installed
+                        var installed = false;
+                        for (var l = 0; l < installedapplist.length; l++) {
+                            if (installedapplist[l][0] == rawdata[k][0]) {
+                                installed = true;
+                            }
+                        }
+                        if (installed == false) {
+                            var savingappid = rawdata[k][0];
+                            firebase.database().ref('apps/' + savingappid + '/').once("value").then(function(snapshot) {
+                                localStorage.setItem(savingappid, JSON.stringify(snapshot.val()));
+                            });
+                        }
+                    }
+                }
+                localStorage.setItem("applist", JSON.stringify(snapshot.val().applist));
+                appver = Number(snapshot.val().CurrentVersion);
+                localStorage.setItem('CurrentVersion',appver);
+            }
+        });
+    } else {
+        appverserver.once("value").then(function(snapshot) {
+            localStorage.setItem("applist", JSON.stringify(snapshot.val().applist));
+            appver = Number(snapshot.val().CurrentVersion);
+            localStorage.setItem('CurrentVersion',appver);
+        })
+        firebase.database().ref('apps/').once("value").then(function(snapshot) {
+            var updatedapps = Object.entries(snapshot.val());
+            var installedapplist = [];
+            for (var i = 0; i < updatedapps.length; i++) {
+                installedapplist.push([updatedapps[i][0], updatedapps[i][1]["version"]]);
+                localStorage.setItem(updatedapps[i][0], JSON.stringify(updatedapps[i][1]));
+            }
+            localStorage.setItem('installedapplist', JSON.stringify(installedapplist));
+          refreshapplist();
+        });
+    }
+}
+
+if (!Object.entries)
+  Object.entries = function( obj ){
+    var ownProps = Object.keys( obj ),
+        i = ownProps.length,
+        resArray = new Array(i); // preallocate the Array
+    while (i--)
+      resArray[i] = [ownProps[i], obj[ownProps[i]]];
+    
+    return resArray;
+  };
+    </script>
+  </body>
+</html>

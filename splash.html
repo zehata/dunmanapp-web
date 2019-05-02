@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+	<title>Document</title>
+	<style>
+		*{
+			font-family: Roboto;
+			user-select: none;
+		}
+		#overlayer{
+			display: flex;
+			flex-direction: column;
+			position: fixed;
+			width: 100vw;
+			top:0;
+			left: 0;
+			height: 100vh;
+		}
+		#signinwrapper{
+			width: fit-content;
+			display: flex;
+			flex-direction: column;
+			margin: auto;
+		}
+		#signintext{
+			margin:auto;
+			width: fit-content;
+			font-family: Google Sans Display, Roboto;
+			font-size: 1.2em;
+    		transition: all 1s cubic-bezier(.25, .8, .25, 1);
+    		opacity: 0;
+		}
+		#signinbutton{
+			margin: auto;
+			margin-top: 20px;
+			width: 30px;
+			height:30px;
+			border-radius: 25px;
+			background-color: rgb(0, 32, 96);
+			padding: 10px;
+    		transition: all 1s cubic-bezier(.25, .8, .25, 1);
+			opacity: 0;
+		}
+		#nextimg{
+			margin: auto;
+			width: 100%;
+			height: 100%;
+		}
+		#welcome{
+			font-family: Google Sans Display, Roboto;
+			margin: auto;
+			font-size: 1.2em;
+		}
+		#info{
+    		transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+			margin: auto;
+			height: 0px;
+			overflow: hidden;
+		}
+		#levelwrapper{
+			margin: auto; 
+			font-family: Google Sans Display, Roboto; 
+			width: fit-content; 
+			margin-top: 20px;
+			display: flex;
+			flex-direction: column;
+		}
+		#confirmlevel{
+			margin: auto;
+			margin-top: 20px;
+			width: 30px;
+			height:30px;
+			border-radius: 25px;
+			background-color: rgb(0, 32, 96);
+			padding: 10px;
+		}
+		#nextimg2{
+			margin: auto;
+			width: 100%;
+			height: 100%;
+		}
+		#email{
+			margin: auto;
+			font-family: Google Sans Display, Roboto;
+			width: fit-content;
+			padding: 2px;
+			padding-left: 10px;
+			padding-right: 10px;
+			border-radius: 30px;
+			margin-top: 10px;
+			border: 1px solid rgb(0, 32, 96);
+		}
+		#overlayer{
+			opacity: 0;
+		}
+		#logowrapper{
+			margin: auto;
+			width: 100px;
+			height: 100px;
+			margin-bottom: 40px;
+		}
+		#logo{
+			width: 100px;
+			height: 100px;
+			position: absolute;
+    		transition: all 1s cubic-bezier(.25, .8, .25, 1);
+    		opacity: 0;
+		}
+		#dunmananimation{
+			width: 100px;
+			height: 100px;
+			position: absolute;
+    		transition: all 1s cubic-bezier(.25, .8, .25, 1);
+		}
+	</style>
+</head>
+<body>
+	<div id="overlayer">
+		<div style="flex-grow: 1;"></div>
+		<div id="signinwrapper">
+			<div id="logowrapper"><img src="dunmananimation.gif" id="dunmananimation" alt=""><img src="Dunman-High-School.jpg" id="logo" alt=""></div>
+			
+			<div id="signintext">Sign in with your DHS account</div>
+			<div id="signinbutton" onclick="startGSO();"><img src="next.png" id="nextimg2" alt=""/></div>
+			
+			<div id="info">
+				<div id="welcome"></div>
+				<div id="email"></div>
+				<div id="levelwrapper">Confirm your level
+					<div id="levelno"></div>
+				</div>
+			</div>
+		</div>
+		<div style="flex-grow: 1;"></div>
+	</div>
+	<script>
+		setTimeout(function(){document.getElementById('dunmananimation').style.opacity=0;document.getElementById('logo').style.opacity=1;},800)
+
+		var config = {
+		    apiKey: "AIzaSyDfAkKocOAk3Elv9V5x0Po4NXuuGGCfdng",
+		    authDomain: "dhypetest0.firebaseapp.com",
+		    databaseURL: "https://dhypetest0.firebaseio.com",
+		    projectId: "dhypetest0",
+		    storageBucket: "",
+		    messagingSenderId: "677082806183"
+		};
+
+		firebase.initializeApp(config);
+
+		if (localStorage.getItem('signinprocess')){
+			localStorage.removeItem('signinprocess');
+
+			firebase.auth().getRedirectResult().then(function(result) {
+			  if (result.credential) {
+			    // This gives you a Google Access Token. You can use it to access the Google API.
+			    var token = result.credential.accessToken;
+			    // ...
+			  }
+			  // The signed-in user info.
+			  var user = result.user;
+			  if(user.email.endsWith("@dhs.sg")){
+			  	success(user.email, user.displayName);
+			  } else {
+			  	failed();
+			  }
+			}).catch(function(error) {
+			  // Handle Errors here.
+			  var errorCode = error.code;
+			  var errorMessage = error.message;
+			  // The email of the user's account used.
+			  var email = error.email;
+			  // The firebase.auth.AuthCredential type that was used.
+			  var credential = error.credential;
+			  // ...
+			});
+
+		} else {
+			setTimeout(function(){
+			document.getElementById('signintext').style.opacity = 1;
+			document.getElementById('signinbutton').style.opacity = 1;},800);
+		}
+
+		var provider = new firebase.auth.GoogleAuthProvider();
+		provider.setCustomParameters({
+		  'login_hint': 'user@dhs.sg'
+		});
+		var runningInAndroid = true;
+		try{
+			Android.consolelog('hi');
+		} catch (e){
+			runningInAndroid = false;
+		}
+		if(localStorage.getItem('authed')){
+			// skip sign in
+			if(runningInAndroid){
+				Android.enabledrawer();
+				Android.signinsuccess();
+			} else {
+				window.location.href="index.html";
+			}
+		} else {
+			document.getElementById('overlayer').style.opacity = "1";
+		}
+		
+		function startGSO(){
+			localStorage.setItem('signinprocess',true);
+			firebase.auth().signInWithRedirect(provider);
+		}
+		var googleemail = "";
+		var isstaff = false;
+		function success(email,name){
+			googleemail = email;
+			var level = Number(name[3]);
+			localStorage.setItem('googleaccountname',name);
+			localStorage.setItem('googleaccountemail',googleemail);
+			localStorage.setItem('authed',true);
+			if (typeof level == "number"){
+				var classyear = 10*Number(name[0]) + Number(name[1]);
+				classyear += (6-level);
+				localStorage.setItem('classOf',classyear);
+				var d = new Date();
+				localStorage.setItem('studentlvl',(Number(d.getFullYear()) - 1994 - Number(classyear)));
+			} else {
+				document.getElementById('levelwrapper').innerHTML = "Staff";
+				isstaff = true;
+				localStorage.setItem('studentlvl',-1);
+				localStorage.setItem('staff',"true");
+			}
+			document.getElementById('welcome').innerHTML = "Welcome, "+name;
+			document.getElementById('email').innerHTML = email;
+			window.location.href = "index.html";
+		}
+		function failed(){
+			document.getElementById('signintext').innerHTML = "Authentication failed, make sure you are using your DHS account";
+			firebase.auth().signOut().then(function() {
+			  // Sign-out successful.
+			}).catch(function(error) {
+			  // An error happened.
+			});
+		}
+	</script>
+</body>
+</html>
