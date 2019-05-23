@@ -414,15 +414,36 @@
             return currentappdata;
         }
 
+        function eligibleForApp(eligibles){
+            if(eligibles){
+                var studentlvl = localStorage.getItem('studentlvl');
+                var year = 'Y'+studentlvl;
+                var email = localStorage.getItem('googleaccountemail').replace(new RegExp("\\.","g"),"?");
+                if(localStorage.getItem("staff")){
+                    if(eligibles[Staff]){
+                        return true;
+                    } else if (eligibles.hasOwnProperty("specppl")){
+                        return (eligibles["specppl"].indexOf(email) != -1);
+                    }
+                }
+                if(eligibles[year]){
+                    return true;
+                } else if (eligibles.hasOwnProperty("specppl")){
+                    return (eligibles["specppl"].indexOf(email) != -1);
+                }
+            }
+        }
+
         function updatecheck() {
             if (navigator.onLine) {
                 appverserver = firebase.database().ref('appsversion/');
-                if (installedapplist && installedapplist.length > 0) {
                     appverserver.on("value", function(snapshot) { // check the database for app versions and app list version
                         installedapplist = JSON.parse(localStorage.getItem('installedapplist'));
+                        var eligibility = snapshot.val().eligibility;
                         rawdata = Object.entries(snapshot.val());
                         if (appver < Number(snapshot.val().CurrentVersion)) { // if there has been an update to the app list version                            
                             // for each installed app
+                            if(installedapplist){
                             for (var j = 0; j < installedapplist.length; j++) {
                                 // should we update or delete or leave it?
                                 // should we delete?
@@ -431,7 +452,9 @@
                                 for (var i = 0; i < rawdata.length; i++) {
                                     if (rawdata[i][0] != "applist" && rawdata[i][0] != "CurrentVersion") {
                                         if (installedapplist[j][0] == rawdata[i][0]) {
-                                            deleteapp = false;
+                                            if(eligibleForApp(eligibility[rawdata[i][0]])){
+                                                deleteapp = false;
+                                            }
                                         }
                                     }
                                 }
@@ -450,76 +473,65 @@
                                     });
                                     localStorage.setItem("installedapplist", JSON.stringify(installedapplist));
                                 }
-                            }
-                            updateapp(rawdata);
+                            }}
+                            updateapp(eligibility ,rawdata);
                             // for each app in appserver
                             for (var k = 0; k < rawdata.length; k++) {
                                 if (rawdata[k][0] != "applist" && rawdata[k][0] != "CurrentVersion") {
                                     // check if it is installed
                                     var installed = false;
-                                    for (var l = 0; l < installedapplist.length; l++) {
-                                        if (installedapplist[l][0] == rawdata[k][0]) {
-                                            installed = true;
+                                    if(installedapplist){
+                                        for (var l = 0; l < installedapplist.length; l++) {
+                                            if (installedapplist[l][0] == rawdata[k][0]) {
+                                                installed = true;
+                                            }
                                         }
                                     }
-                                    if (installed == false) {
+                                    if (installed == false && eligibleForApp(eligibility[rawdata[k][0]])) {
                                         var savingappid = rawdata[k][0];
                                         getNewData(savingappid, k);
                                     }
                                 }
                             }
-                            localStorage.setItem("applist", JSON.stringify(snapshot.val().applist));
-                            applist = snapshot.val().applist;
+
+                            var activatedapps = Object.entries(snapshot.val().activation);
+                            var applist = [];
+                            for(var o = 0; o < activatedapps.length; o++){
+                                if(eligibleForApp(eligibility[activatedapps[o][0]])){
+                                    var version = snapshot.val()[activatedapps[o][0]];
+                                    applist.push([activatedapps[o][1][0],version,activatedapps[o][0]]);
+                                }
+                            }
+                            localStorage.setItem('applist', JSON.stringify(applist));
+
                             appver = Number(snapshot.val().CurrentVersion);
                             localStorage.setItem('CurrentVersion', appver);
                         }
+                        applist = JSON.parse(localStorage.getItem('applist'));
+                        document.getElementById('preview').contentWindow.populatedrawer(applist);
                         checkRecServerAlgoUpdated();
                     });
-                } else {
-                    appverserver.once("value").then(function(snapshot) {
-                        localStorage.setItem("applist", JSON.stringify(snapshot.val().applist));
-                        appver = Number(snapshot.val().CurrentVersion);
-                        localStorage.setItem('CurrentVersion', appver);
-                    })
-                    firebase.database().ref('apps/').once("value").then(function(snapshot) {
-                        var updatedapps = Object.entries(snapshot.val());
-                        var installedapplist = [];
-                        for (var i = 0; i < updatedapps.length; i++) {
-                            if (updatedapps[i][0] != "test" && updatedapps[i][0] != "test") {
-                                installedapplist.push([updatedapps[i][0], updatedapps[i][1]["version"]]);
-                                localStorage.setItem(updatedapps[i][0], JSON.stringify(updatedapps[i][1]));
-                                if (updatedapps[i][1]["flag"]) {
-                                    if (updatedapps[i][1]["flag"]["requiresOfflineData"]) {
-                                        offlineReadyApps.push(updatedapps[i][0]);
-                                    }
-                                }
-                                checkOfflineData();
-                            }
-                        }
-                        localStorage.setItem("offlineReadyApps", JSON.stringify(offlineReadyApps));
-                        localStorage.setItem('installedapplist', JSON.stringify(installedapplist));
-                        refreshapplist();
-                    });
-                    checkRecServerAlgoUpdated();
-                }
             } else {
                 checkRecServerAlgoUpdated();
             }
+            applist = JSON.parse(localStorage.getItem('applist'));
             document.getElementById('preview').contentWindow.populatedrawer(applist);
         }
 
-        function updateapp(rawdata) {
+        function updateapp(eligibility, rawdata) {
             // should we update?
             for (var i = 0; i < rawdata.length; i++) {
-                if (rawdata[i][0] != "CurrentVersion" && rawdata[i][0] != "applist") {
-                    for (var j = 0; j < installedapplist.length; j++) {
-                        if (installedapplist[j][0] == rawdata[i][0]) {
-                            // if server version is higher
-                            if (Number(installedapplist[j][1]) < rawdata[i][1]) {
-                                // then update     
-                                var updatedappid = installedapplist[j][0];
-                                installedapplist[j][1] = rawdata[i][1];
+                if (rawdata[i][0] != "CurrentVersion" && rawdata[i][0] != "applist" && eligibleForApp(eligibility[rawdata[i][0]])) {
+                    if(installedapplist){
+                        for (var j = 0; j < installedapplist.length; j++) {
+                            if (installedapplist[j][0] == rawdata[i][0]) {
+                                // if server version is higher
+                                if (Number(installedapplist[j][1]) < rawdata[i][1]) {
+                                    // then update     
+                                    var updatedappid = installedapplist[j][0];
+                                    installedapplist[j][1] = rawdata[i][1];
 
+                                }
                             }
                         }
                     }
@@ -531,14 +543,20 @@
             firebase.database().ref('apps/' + id + '/').once("value").then(function(snapshot) {
                 if (snapshot.val().flag) {
                     if (snapshot.val().flag.requiresOfflineData) {
-                        var offlineReadyApps = JSON.parse(localStorage.getItem("offlineReadyApps"));
+                        var offlineReadyApps = [];
+                        if(localStorage.getItem('offlineReadyApps')){
+                            offlineReadyApps = JSON.parse(localStorage.getItem("offlineReadyApps"));
+                        }
                         offlineReadyApps.push(id);
                         localStorage.setItem("offlineReadyApps", JSON.stringify(offlineReadyApps));
                     }
                 }
                 checkOfflineData();
                 var snapshotval = snapshot.val();
-                var installedapplist = JSON.parse(localStorage.getItem("installedapplist"));
+                var installedapplist = [];
+                if(localStorage.getItem('installedapplist')){
+                    installedapplist = JSON.parse(localStorage.getItem("installedapplist"));
+                }
                 installedapplist.push(rawdata[i]);
                 localStorage.setItem(id, JSON.stringify(snapshotval));
                 localStorage.setItem('installedapplist', JSON.stringify(installedapplist));

@@ -612,14 +612,16 @@ var applist = [];
 
 function populatedrawer(applist){
     document.getElementById('allappscont').innerHTML = "";
-    for(var i = 0; i < applist.length; i++){
-        var applisting = document.createElement('DIV');
-        applisting.className = "allapps";
-        applisting.innerHTML = "<div onclick=\"goto("+i+");\" style=\"display:inline-flex; width:calc(100% - 20px);\"><div class=\"allappsnames\">"+applist[i][0]+"</div><div style=\"padding-top:15px;\"></div></div>";
-        if(i == (applist.length-1)){
-            applisting.style.borderBottom = "none";
+    if(applist){
+        for(var i = 0; i < applist.length; i++){
+            var applisting = document.createElement('DIV');
+            applisting.className = "allapps";
+            applisting.innerHTML = "<div onclick=\"goto("+i+");\" style=\"display:inline-flex; width:calc(100% - 20px);\"><div class=\"allappsnames\">"+applist[i][0]+"</div><div style=\"padding-top:15px;\"></div></div>";
+            if(i == (applist.length-1)){
+                applisting.style.borderBottom = "none";
+            }
+            $("allappscont").appendChild(applisting);
         }
-        $("allappscont").appendChild(applisting);
     }
 }
 
