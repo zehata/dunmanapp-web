@@ -80,9 +80,6 @@
         var installedapplist;
         var offlineReadyApps = [];
         var offlineData = {};
-        var analytics = {};
-        var analyticspro = [];
-        var analyticsserver = "";
 
         if (localStorage.getItem("offlineReadyApps")) {
             offlineReadyApps = JSON.parse(localStorage.getItem("offlineReadyApps"));
@@ -150,19 +147,6 @@
                 installedapplist = JSON.parse(localStorage.getItem('installedapplist'))
                 applist = JSON.parse(localStorage.getItem('applist'));
                 appver = Number(localStorage.getItem('CurrentVersion'));
-            }
-            if (connected) {
-                if (localStorage.getItem('analytics')) {
-                    analytics = JSON.parse(localStorage.getItem('analytics'));
-                    analyticspro = Object.entries(analytics);
-                    for (var k = 0; k < analyticspro.length; k++) {
-                        saveanalyticsdata(k);
-                    }
-                }
-            } else {
-                if (localStorage.getItem('analytics')) {
-                    analytics = JSON.parse(localStorage.getItem('analytics'));
-                }
             }
             checkOfflineData();
             updatecheck();
@@ -295,15 +279,6 @@
         function goto(x) {
             selectedappid = applist[x][2];
             selectedapp = JSON.parse(localStorage.getItem(selectedappid));
-            if (analytics[selectedappid]) {
-                var timesused = analytics[selectedappid];
-                timesused++;
-                analytics[selectedappid] = timesused;
-            } else {
-                var timesused = 0;
-                timesused++;
-                analytics[selectedappid] = timesused;
-            }
             if (connected) {
                 // injecting data adaptor
                 try {
