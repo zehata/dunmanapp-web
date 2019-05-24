@@ -608,7 +608,7 @@
                             if (shouldpush) {
                                 if (recApps.length != 0) {
                                     var j = 0;
-                                    while (recAlgoPro[i][1][1] < recApps[j][1]) {
+                                    while (Number(recAlgoPro[i][1][1]) < Number(recApps[j][1])) {
                                         j++;
                                         if (j == recApps.length) {
                                             break;
@@ -632,7 +632,7 @@
                             if (shouldpush) {
                                 if (recApps.length != 0) {
                                     var j = 0;
-                                    while (recAlgoPro[i][1][1] < recApps[j][1]) {
+                                    while (Number(recAlgoPro[i][1][1]) < Number(recApps[j][1])) {
                                         j++;
                                         if (j == recApps.length) {
                                             break;
@@ -652,7 +652,7 @@
                         if (eval(recAlgoPro[i][1][0])) {
                             if (recApps.length != 0) {
                                 var j = 0;
-                                while (recAlgoPro[i][1][1] < recApps[j][1]) {
+                                while (Number(recAlgoPro[i][1][1]) < Number(recApps[j][1])) {
                                     j++;
                                     if (j == recApps.length) {
                                         break;
@@ -670,6 +670,7 @@
                     }
                 }
             }
+            console.log(recApps)
             for (var k = 0; k < recApps.length; k++) {
                 reccards.push(recApps[k][0]);
             }
