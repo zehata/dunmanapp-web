@@ -470,7 +470,7 @@
                             }
 
                             var activatedapps = Object.entries(snapshot.val().activation);
-                            var applist = [];
+                            applist = [];
                             for(var o = 0; o < activatedapps.length; o++){
                                 if(eligibleForApp(eligibility[activatedapps[o][0]])){
                                     var version = snapshot.val()[activatedapps[o][0]];

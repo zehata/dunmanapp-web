@@ -244,80 +244,80 @@
     </style>
   </head>
 
-  <body onload="parent.loaded(); if(localStorage.getItem('lastscreen')){if(localStorage.getItem('lastscreen') == 'all'){changetoall();}} timecheck();">
-        <div id="reccont">
-            <div id="recnavbar">
-                <div id="recbarsegctrl" class="segctrl">
-                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">Recommended</div>
-                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255);">All</div>
+  <body onload="parent.loaded(); /* when the page is loaded, prompt the wrapper to return necessary information */ if(localStorage.getItem('lastscreen')){if(localStorage.getItem('lastscreen') == 'all'){changetoall();}} timecheck(); // check whether the user was on the recommendation page or the all page when he went into a function">
+        <div id="reccont"> <!-- This is container for the recommendations, along with the top bar and the title -->
+            <div id="recnavbar"> <!-- This is the navbar, with the recommendation/all selector. This is only visible when the page is not scrolled beyond the navbar -->
+                <div id="recbarsegctrl" class="segctrl"> <!-- This is the recommendation/all selector  -->
+                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">Recommended</div> <!-- "Recommendation" selector -->
+                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255);">All</div> <!-- "All" selector -->
                 </div>
             </div>
-            <div class="top">
+            <div class="top"> <!-- This is the title -->
                 <div class="title">Home</div>
                 <div class="greet" id="greet0"></div>
             </div>
-            <div id="recsegctrl" class="segctrl">
-                <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">Recommended</div>
+            <div id="recsegctrl" class="segctrl"> <!-- This is the navbar, with the recommendation/all selector. This is visible when the page is scrolled beyond the navbar -->
+                <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">Recommended</div> <!-- Same deal as above -->
                 <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255);">All</div>
             </div>
-            <div id="reccardcont">
+            <div id="reccardcont"> <!-- This is the container for the cards themselves -->
             </div>
         </div>
-        <div id="allcont">
-            <div id="allnavbar">
-                <div id="allbarsegctrl" class="segctrl">
-                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255);">Recommended</div>
-                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">All</div>
+        <div id="allcont"> <!-- This is the container when "all" is selected -->
+            <div id="allnavbar"> <!-- Navbar, same as above, but only shown when "all" is selected -->
+                <div id="allbarsegctrl" class="segctrl"> <!-- "Recommendation/All" selector -->
+                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255);">Recommended</div> <!-- This is the "recommended" selector -->
+                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">All</div> <!-- This is the "all" selector -->
                 </div>
             </div>
-            <div class="top">
+            <div class="top"> <!-- This is the title, when "all" is selected -->
                 <div class="title">Home</div>
                 <div class="greet" id="greet1"></div>
             </div>
-            <div id="allsegctrl" class="segctrl">
+            <div id="allsegctrl" class="segctrl"> <!-- Same as above, only shown when scrolled beyond the navbar -->
                 <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255);">Recommended</div>
                 <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">All</div>
             </div>
-            <div id="allappscont">
+            <div id="allappscont"> <!-- This is the container for the list of functions -->
             </div>
         </div>
-        <div id="dialog">
+        <div id="dialog"> <!-- This is for informing the user that the app needs to know their username and email address -->
             <div style="margin-top:15px; flex-grow: 1;">This app would like to access your profile. This app will be able to read your name and email. Allow this request?</div>
             <div id="dialogbtns">
-                <div id="allowpermission" onclick="parent.allowpermission();">Allow</div>
-                <div id="denypermission" onclick="parent.denypermission();">Deny</div>
+                <div id="allowpermission" onclick="parent.allowpermission();">Allow</div> <!-- If they allow the app to access their emails and names, they will not have to do so anymore in the future -->
+                <div id="denypermission" onclick="parent.denypermission();">Deny</div> <!-- If they don't allow, the app will not run -->
             </div>
         </div>
-    <div id="darken"></div>
+    <div id="darken"></div> <!-- Darkens the background when the dialog box shows up -->
     <script>
-    var timecheckinterval;
+    var timecheckinterval; // To see how long since time was last checked
 
-    function timecheck(){
-        var d = new Date();
-        var greet0 = document.getElementById('greet0');
+    function timecheck(){ // This is to check and record the last time the title was updated
+        var d = new Date(); // New Date object
+        var greet0 = document.getElementById('greet0'); // Update both the titles
         var greet1 = document.getElementById('greet1');
         if(d.getHours() < 1){
-            greet0.innerHTML = "Good Night";
+            greet0.innerHTML = "Good Night"; // Title when night
             greet1.innerHTML = "Good Night";
         } else if(d.getHours() < 4){
-            greet0.innerHTML = "Why are you not sleeping";
+            greet0.innerHTML = "Why are you not sleeping"; // Easter egg!!
             greet1.innerHTML = "Why are you not sleeping";
         } else if(d.getHours() < 12){
-            greet0.innerHTML = "Good Morning";
+            greet0.innerHTML = "Good Morning"; // Good manners
             greet1.innerHTML = "Good Morning";
         } else if (d.getHours() < 16){
-            greet0.innerHTML = "Good Afternoon";
+            greet0.innerHTML = "Good Afternoon"; // Also good manners
             greet1.innerHTML = "Good Afternoon";
         } else if (d.getHours() < 20){
-            greet0.innerHTML = "Good Evening";
+            greet0.innerHTML = "Good Evening"; // This is a thing now
             greet1.innerHTML = "Good Evening";
         } else {
-            greet0.innerHTML = "Good Night";
+            greet0.innerHTML = "Good Night"; // This joke went too far
             greet1.innerHTML = "Good Night";
         }
-        var secondstillnxtmn = 60 - d.getSeconds();
+        var secondstillnxtmn = 60 - d.getSeconds(); // Seconds until we update the time again
         setTimeout(function(){
-            timecheckinterval = setInterval(function(){
+            timecheckinterval = setInterval(function(){ // We will do this every minute
                 d = new Date();
                 if(d.getMinutes() == 0){
                     var greet0 = document.getElementById('greet0');
@@ -339,20 +339,20 @@
                         greet1.innerHTML = "Good Evening";
                     } else {
                         greet0.innerHTML = "Good Night";
-                        greet1.innerHTML = "Good Night";
+                        greet1.innerHTML = "Good Night"; // Same deal
                     }
                 }
             },60000);
         },secondstillnxtmn*1000)
     }
 
-document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('contextmenu', event => event.preventDefault()); // No right-click / long-click menu
 
-var beforetdtouchy = 0;
+var beforetdtouchy = 0; // Scroll position before 3D-touch
 
 function tdtouchexpand(card){
-    beforetdtouchy = $('reccont').scrollTop;
-    document.body.style.backgroundColor = "rgba(0,0,0,0.1)";
+    beforetdtouchy = $('reccont').scrollTop; // Expand card when light pressure applied
+    document.body.style.backgroundColor = "rgba(0,0,0,0.1)"; // Just 
     document.body.className = "noscroll";
     $('reccont').style.overflowY = "hidden";
     card.parentElement.style.position = "absolute";
@@ -372,17 +372,18 @@ function tdtouchexpand(card){
 }
 
 function clickside(event){
+    // Cancel 3D-touch when the side is clicked
     var card = $(tdtouchindex);
     if(event.target = card.parentElement){
         canceltdtouch();
     }
 }
 
-var tdtouchindex = "";
+var tdtouchindex = ""; // Which card was 3D-touched
 
 function canceltdtouch(){
     if(tdtouchindex){
-        try{
+        try{ // Return the designs 
             setTimeout(function(){$('reccont').scrollTop = beforetdtouchy;},1);
     var card = $(tdtouchindex);
     document.body.style.backgroundColor = "white";
@@ -405,7 +406,7 @@ function canceltdtouch(){
     }
 }
 
-function onTouchEnd(e){
+function onTouchEnd(e){ // When user releases his touch, then cancel the action
     canceltdtouch();
 }
 
@@ -427,6 +428,8 @@ function onTouchForceChange(e) {
 }
 
 function straightonclick(){
+    // If the user clicks the card directly and releases, then just go straight to the function
+    applist = JSON.parse(localStorage.getItem('applist'));
     var appid = reccards[event.target.id.slice(4)];
     for(var i = 0; i < applist.length; i++){
         if(applist[i][2] == appid){
@@ -436,39 +439,45 @@ function straightonclick(){
 }
 
 function debugtest(e){
+    // Just for testing kids
     tdtouchexpand(e.target);
 }
 
 function setupForceClickBehavior(someElement)
 {
+    // To set up the cards' 3D-touch behaviour
   someElement.addEventListener("touchforcechange", onTouchForceChange, false);
   someElement.addEventListener("touchend", onTouchEnd, false);
   someElement.addEventListener("click", straightonclick, false);
   // someElement.addEventListener("touchstart", debugtest, false);
 }
 
+var reccards = []; // These are the functions which should provide a recommendation card
 
-var reccards = [];
-
-    function createLayouts(){
-        reccards = parent.getreccards();
-        var cardscont = document.getElementById('reccardcont');
-        cardscont.innerHTML = "";
-        for(var i = 0; i < reccards.length; i++){
-            var layout = document.createElement('div');
-            layout.id="card"+i;
-            layout.className = "cardwrappers";
-            cardscont.appendChild(layout);
-        }
+function createLayouts(){
+    reccards = parent.getreccards(); // Create the frames before populating them because downloading data takes time
+    var cardscont = document.getElementById('reccardcont');
+    cardscont.innerHTML = "";
+    for(var i = 0; i < reccards.length; i++){
+        var layout = document.createElement('div');
+        layout.id="card"+i;
+        layout.className = "cardwrappers";
+        cardscont.appendChild(layout);
     }
+}
 
 function reccardsadaptor(card,id,i){
+        // Read the reccard and decide what to do with it.
         var imageGiver = `window.addEventListener("load", function(){ new MutationObserver(function(mutationsList, observer) {var images = document.getElementsByTagName('img');for(var i = 0; i < images.length; i++){if(images[i].src.slice(0,5) != "data:" && images[i].src != ""){var ogsrc = images[i].src.replace(/^.*[\\\\\\/]/, '').replace(new RegExp("\\\\.", "g"), "?");if(apppics.hasOwnProperty(ogsrc)){images[i].src = apppics[ogsrc];} else {images[i].removeAttribute("src");}}}}).observe(document.body, { attributes: true, childList: true, subtree: true }); }, false);`;
+        // Might need to give images, if it is a context
         var newcard = document.getElementById('card'+i);
+        // Create the card
         switch(card.style){
             case "normal":
+                // If the card is a simple card,
                 if(card.theme == "light"){
                     newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="padding:20px;">'+card.title+'</p>'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
+                    // Just put in the necessary stuff and no special designs
                     $('reccardcont').appendChild(newcard);
                 } else {
                     newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="color:white; padding:20px;">'+card.title+'</p>'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
@@ -476,6 +485,7 @@ function reccardsadaptor(card,id,i){
                 }
                 break;
             case "ioscontext":
+                // if the card can display a 3D-touch
                 var app = JSON.parse(localStorage.getItem(id));
                 newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><iframe id="context'+i+'"></iframe><div class="veil" id="veil'+i+'"></div></div>';
                 $('reccardcont').appendChild(newcard);
@@ -489,8 +499,10 @@ function reccardsadaptor(card,id,i){
                     }
                 }
                 $('context'+i).contentDocument.write('<script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></sc' + 'ript><script type="text/javascript">var config = {    apiKey: "AIzaSyDfAkKocOAk3Elv9V5x0Po4NXuuGGCfdng",    authDomain: "dhypetest0.firebaseapp.com",    databaseURL: "https://dhypetest0.firebaseio.com",    projectId: "dhypetest0",    storageBucket: "",   messagingSenderId: "677082806183"}; firebase.initializeApp(config); </sc' + 'ript><script> var currentappdata = ' + JSON.stringify(currentappdata) + '; try{var dataserver = firebase.database().ref(\'/appsstorage/' + selectedappid + '/\');}catch(e){} try{dataserver.on("value",function(snapshot){currentappdata = snapshot.val(); try{onDataChanged(currentappdata);}catch(e){} });}catch(e){} function savedata(data){ if(Array.isArray(data)){ var data = Object.assign({}, data);} firebase.database().ref("/appsstorage/'+selectedappid+'/").update(data); } function getappdata(){return currentappdata; };  '+imageGiver+' var apppics = '+JSON.stringify(apppics)+'; function getStudentLevel(){ var studentlvl = Number(localStorage.getItem("studentlvl")); return studentlvl; } function getStudentName(){ var name = "'+localStorage.getItem("googleaccountname")+'"; return name; } function getGraduationYear(){ var year = localStorage.getItem("classOf"); return year; } </sc' + 'ript>'+app["context?html"]);
+                // Put in the necessary html
                 break;
             case "simple":
+                // Just a simple sentence
                 if(card.theme == "light"){
                     newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="padding:20px; color:white;">'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
                 } else {
@@ -499,11 +511,15 @@ function reccardsadaptor(card,id,i){
                 $('reccardcont').appendChild(newcard);
                 break;
             case "scrollX":
+                // You will know this when you see the app
+                // Basically just some cards that you can scroll left and right
+                // The title and background
                 if(card.theme == "light"){
                     newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:white;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
                 } else {
                     newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:black;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
                 }
+                // The small cards
                 $('reccardcont').appendChild(newcard);
                 for (var j = 0; j < card.desc.length; j++) {
                     var minilist = document.createElement('div');
@@ -517,11 +533,13 @@ function reccardsadaptor(card,id,i){
                 }
                 break;
             case "list":
+                // The title and background
                 if(card.theme == "light"){
                     newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:white;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
                 } else {
                     newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:black;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
                 }
+                // The small rows
                 $('reccardcont').appendChild(newcard);
                 for (var j = 0; j < card.desc.length; j++) {
                     var minilist = document.createElement('div');
@@ -538,7 +556,7 @@ function reccardsadaptor(card,id,i){
         setupForceClickBehavior($('card'+i));
 }
 
-var recposy = 0;
+var recposy = 0; // 
 
 function changetorec(){
     localStorage.setItem('lastscreen','rec');
