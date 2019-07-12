@@ -3,7 +3,24 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css.css">
+    <script>
+        var theme = "default";
+
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        switch(theme){
+            case "default":
+                link.href = "css.css";
+            break;
+            case "pink":
+                link.href = "pink.css";
+            break;
+            case "aurora":
+                link.href="Aurora.css";
+            break;
+        }
+        document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
     <script src="./md5.js"></script>
     <title>Home</title>
     <style>
@@ -53,7 +70,7 @@
             border-radius: 10px;
             width: calc(100vw - 44px);
             margin-left:20px;
-            border: 2px solid rgb(0, 122, 255);
+            border: 2px solid var(--accent-color);
             margin-top:10px;
             display: inline-flex;
             margin-bottom: 10px;
@@ -117,14 +134,6 @@
             padding-right: 0;
             font-size: 1.2em;
         }
-        .cards{
-            height: 100%;
-            width: 100%;
-            background-color: rgb(0,122,255);
-            border-radius: 10px;
-            transition: height 0.3s cubic-bezier(.25,.8,.25,1);
-            position: relative;
-        }
         iframe{
             width: 100%;
             height: 100%;
@@ -169,24 +178,6 @@
     width: calc(100% - 40px);
     padding: 20px;
     padding-top: 0;
-}
-.minilistwhite{
-    width: calc(100%);
-    height: fit-content;
-    border-bottom: 1px solid white;
-    color:white;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    display: flex;
-}
-.minilistblack{
-    width: calc(100%);
-    height: fit-content;
-    border-bottom: 1px solid black;
-    color:black;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    display: flex;
 }
 .listleft{
     flex-grow: 1;
@@ -248,8 +239,8 @@
         <div id="reccont"> <!-- This is container for the recommendations, along with the top bar and the title -->
             <div id="recnavbar"> <!-- This is the navbar, with the recommendation/all selector. This is only visible when the page is not scrolled beyond the navbar -->
                 <div id="recbarsegctrl" class="segctrl"> <!-- This is the recommendation/all selector  -->
-                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">Recommended</div> <!-- "Recommendation" selector -->
-                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255);">All</div> <!-- "All" selector -->
+                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid; border-color:var(--accent-color); color:var(accent-font-color); background-color: var(--accent-color);">Recommended</div> <!-- "Recommendation" selector -->
+                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid; border-color:var(--accent-color); color:var(--accent-font-color-alt);">All</div> <!-- "All" selector -->
                 </div>
             </div>
             <div class="top"> <!-- This is the title -->
@@ -257,8 +248,8 @@
                 <div class="greet" id="greet0"></div>
             </div>
             <div id="recsegctrl" class="segctrl"> <!-- This is the navbar, with the recommendation/all selector. This is visible when the page is scrolled beyond the navbar -->
-                <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">Recommended</div> <!-- Same deal as above -->
-                <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255);">All</div>
+                <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid; border-color:var(--accent-color); color:var(--accent-font-color); background-color: var(--accent-color);">Recommended</div> <!-- Same deal as above -->
+                <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid; border-color:var(--accent-color); color: var(--accent-font-color-alt);">All</div>
             </div>
             <div id="reccardcont"> <!-- This is the container for the cards themselves -->
             </div>
@@ -266,8 +257,8 @@
         <div id="allcont"> <!-- This is the container when "all" is selected -->
             <div id="allnavbar"> <!-- Navbar, same as above, but only shown when "all" is selected -->
                 <div id="allbarsegctrl" class="segctrl"> <!-- "Recommendation/All" selector -->
-                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255);">Recommended</div> <!-- This is the "recommended" selector -->
-                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">All</div> <!-- This is the "all" selector -->
+                    <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid var(--accent-color); color:var(--accent-font-color-alt);">Recommended</div> <!-- This is the "recommended" selector -->
+                    <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid var(--accent-color); color:var(--accent-font-color); background-color: var(--accent-color);">All</div> <!-- This is the "all" selector -->
                 </div>
             </div>
             <div class="top"> <!-- This is the title, when "all" is selected -->
@@ -275,8 +266,8 @@
                 <div class="greet" id="greet1"></div>
             </div>
             <div id="allsegctrl" class="segctrl"> <!-- Same as above, only shown when scrolled beyond the navbar -->
-                <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid rgb(0,122,255);">Recommended</div>
-                <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid rgb(0,122,255); color:white; background-color: rgb(0,122,255);">All</div>
+                <div class="segbtn rec" onclick="changetorec();" style="border-right: 1px solid var(--accent-color); color:var(--accent-font-color-alt);">Recommended</div>
+                <div class="segbtn all" onclick="changetoall();" style="border-left: 1px solid var(--accent-color); color:var(--accent-font-color); background-color: var(--accent-color);">All</div>
             </div>
             <div id="allappscont"> <!-- This is the container for the list of functions -->
             </div>
@@ -290,6 +281,7 @@
         </div>
     <div id="darken"></div> <!-- Darkens the background when the dialog box shows up -->
     <script>
+
     var timecheckinterval; // To see how long since time was last checked
 
     function timecheck(){ // This is to check and record the last time the title was updated
@@ -460,7 +452,7 @@ function createLayouts(){
     cardscont.innerHTML = "";
     for(var i = 0; i < reccards.length; i++){
         var layout = document.createElement('div');
-        layout.id="card"+i;
+        layout.id="card"+i+"wrapper";
         layout.className = "cardwrappers";
         cardscont.appendChild(layout);
     }
@@ -470,25 +462,22 @@ function reccardsadaptor(card,id,i){
         // Read the reccard and decide what to do with it.
         var imageGiver = `window.addEventListener("load", function(){ new MutationObserver(function(mutationsList, observer) {var images = document.getElementsByTagName('img');for(var i = 0; i < images.length; i++){if(images[i].src.slice(0,5) != "data:" && images[i].src != ""){var ogsrc = images[i].src.replace(/^.*[\\\\\\/]/, '').replace(new RegExp("\\\\.", "g"), "?");if(apppics.hasOwnProperty(ogsrc)){images[i].src = apppics[ogsrc];} else {images[i].removeAttribute("src");}}}}).observe(document.body, { attributes: true, childList: true, subtree: true }); }, false);`;
         // Might need to give images, if it is a context
-        var newcard = document.getElementById('card'+i);
+        var newcard = document.getElementById('card'+i+"wrapper");
         // Create the card
         switch(card.style){
             case "normal":
                 // If the card is a simple card,
-                if(card.theme == "light"){
-                    newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="padding:20px;">'+card.title+'</p>'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
+                if(card.theme == "light" && theme == "default"){
+                    newcard.innerHTML = '<div id="card'+i+'" class="cards"><div style="padding:20px; text-align:left;">'+card.title+'</p>'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
                     // Just put in the necessary stuff and no special designs
-                    $('reccardcont').appendChild(newcard);
                 } else {
-                    newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="color:white; padding:20px;">'+card.title+'</p>'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
-                    $('reccardcont').appendChild(newcard);
+                    newcard.innerHTML = '<div id="card'+i+'"  class="cards"><div style="color:var(--accent-font-color-alt); padding:20px; text-align:left;">'+card.title+'</p>'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
                 }
                 break;
             case "ioscontext":
                 // if the card can display a 3D-touch
                 var app = JSON.parse(localStorage.getItem(id));
                 newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><iframe id="context'+i+'"></iframe><div class="veil" id="veil'+i+'"></div></div>';
-                $('reccardcont').appendChild(newcard);
                 var proappdata = Object.entries(app);
                 var apppics = {};
                 for(var j = 0; j < proappdata.length; j++){
@@ -503,27 +492,22 @@ function reccardsadaptor(card,id,i){
                 break;
             case "simple":
                 // Just a simple sentence
-                if(card.theme == "light"){
-                    newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="padding:20px; color:white;">'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
+                if(card.theme == "light" && theme == "default"){
+                    newcard.innerHTML = '<div id="card'+i+'"  class="cards"><div style="padding:20px; color:white;">'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
                 } else {
-                    newcard.innerHTML = '<div id="card'+i+'" style="background:'+card.background+';" class="cards"><div style="padding:20px; color:black;">'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
+                    newcard.innerHTML = '<div id="card'+i+'"  class="cards"><div style="padding:20px; color:var(--accent-font-color-alt);">'+card.desc+'</div><div class="veil" id="veil'+i+'"></div></div>';
                 }
-                $('reccardcont').appendChild(newcard);
                 break;
             case "scrollX":
-                // You will know this when you see the app
-                // Basically just some cards that you can scroll left and right
-                // The title and background
-                if(card.theme == "light"){
-                    newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:white;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
+                if(card.theme == "light" && theme == "default"){
+                    newcard.innerHTML = "<div  id='card"+i+"' class='cards'><div style='color:white;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1; text-align:left;'>" + card.title + "<div class='bar' style='background-color:white;'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
                 } else {
-                    newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:black;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
+                    newcard.innerHTML = "<div  id='card"+i+"' class='cards'><div style='color:var(--accent-font-color-alt);'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1; text-align:left;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
                 }
                 // The small cards
-                $('reccardcont').appendChild(newcard);
                 for (var j = 0; j < card.desc.length; j++) {
                     var minilist = document.createElement('div');
-                    if(card.theme == "light"){
+                    if(card.theme == "light" && theme == "default"){
                         minilist.className = "minilistwhite";
                     } else {
                         minilist.className = "minilistblack";
@@ -534,16 +518,15 @@ function reccardsadaptor(card,id,i){
                 break;
             case "list":
                 // The title and background
-                if(card.theme == "light"){
-                    newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:white;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
+                if(card.theme == "light" && theme == "default"){
+                    newcard.innerHTML = "<div id='card"+i+"' class='cards'><div style='color:white;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1; text-align:left;'>" + card.title + "<div class='bar' style='background-color:white;'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
                 } else {
-                    newcard.innerHTML = "<div style='background:"+card.background+";' id='card"+i+"' class='cards'><div style='color:black;'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
+                    newcard.innerHTML = "<div id='card"+i+"' class='cards'><div style='color:var(--accent-font-color-alt);'><div style='display:flex; flex-direction:column; height:100%; width:100%;'><div class='listcardtitle'><div style='display:flex;'><div style='flex-grow:1; text-align:left;'>" + card.title + "<div class='bar'></div></div></div></div><div id='minilistcont" + i + "' class='minilistcont'></div></div></div><div class='veil' id='veil"+i+"'></div></div></div>";
                 }
                 // The small rows
-                $('reccardcont').appendChild(newcard);
                 for (var j = 0; j < card.desc.length; j++) {
                     var minilist = document.createElement('div');
-                    if(card.theme == "light"){
+                    if(card.theme == "light" && theme == "default"){
                         minilist.className = "minilistwhite";
                     } else {
                         minilist.className = "minilistblack";
@@ -552,6 +535,12 @@ function reccardsadaptor(card,id,i){
                     $('minilistcont' + i).appendChild(minilist);
                 }
                 break;
+        }
+        if(theme == "default"){
+            if(card.background){
+                console.log(i)
+                $('card'+i).style.background = card.background;
+            }
         }
         setupForceClickBehavior($('card'+i));
 }

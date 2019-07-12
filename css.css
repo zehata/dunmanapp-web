@@ -3,11 +3,53 @@
 	margin:0;
 	font-family: SF Pro Display;
 }
+
+:root{
+	--accent-color: rgb(0, 122, 255);
+	--accent-font-color: white;
+	--accent-font-color-alt: rgb(0, 122, 255);
+}
+
 @font-face { font-family: SF Pro Display; font-weight: normal; src: url('SFPro.otf'); } 
 
 body{
 	background-color: #f9f9f9;
 }
+
+.bar{
+	height: 3px;
+	width: 50px;
+	margin-top: 10px;
+}
+
+.cards{
+    height: calc(100% - 4px);
+    width: calc(100% - 4px);
+    background-color: rgb(0,122,255);
+    border-radius: 10px;
+    transition: height 0.3s cubic-bezier(.25,.8,.25,1);
+    position: relative;
+}
+
+.minilistwhite{
+    width: calc(100%);
+    height: fit-content;
+    border-bottom: 3px solid white;
+    color:white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+}
+.minilistblack{
+    width: calc(100%);
+    height: fit-content;
+    border-bottom: 3px solid black;
+    color:black;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+}
+
 #darken{
 	position: fixed;
 	left: 0;
